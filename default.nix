@@ -23,4 +23,5 @@ in
 
 rec {
   hello = builder ./hello.hs {};
+  auto = builder ./auto.hs { name = "auto"; };
 }
