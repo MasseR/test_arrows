@@ -25,6 +25,13 @@ instance Arrow Auto where
     let (c, bcAuto) = runAuto auto b
     in ((c, d), first bcAuto)
 
+instance Applicative (Auto a) where
+  pure x = ACons $ \_ -> (x, pure x)
+  (<*>) g f = ACons $ \a ->
+    let (g', gAuto) = runAuto g a
+        (b, bNext) = runAuto f a
+    in (g' b, gAuto <*> bNext)
+
 simulate :: Auto a b -> [a] -> ([b], Auto a b)
 simulate auto [] = ([], auto)
 simulate auto (x:xs) = (y:ys, final)
