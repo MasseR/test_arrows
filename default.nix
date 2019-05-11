@@ -1,10 +1,11 @@
-{ nixpkgs ? import <nixpkgs> {} }:
+{ nixpkgs ? import <nixpkgs> {}
+, buildInputs ? import ./inputs.nix }:
 
-let builder = src: { name ? "exe", buildInputs ? (_: []) }:
+let builder = src: { name ? "exe" }:
   nixpkgs.stdenv.mkDerivation {
     name = "hello";
     src = src;
-    buildInputs = [(nixpkgs.haskellPackages.ghcWithPackages (h: []))];
+    buildInputs = [(nixpkgs.haskellPackages.ghcWithPackages buildInputs)];
     unpackPhase = ''
       cp $src .
     '';
