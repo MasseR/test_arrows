@@ -3,7 +3,7 @@
 
 let builder = src: { name ? "exe" }:
   nixpkgs.stdenv.mkDerivation {
-    name = "hello";
+    name = "${name}";
     src = src;
     buildInputs = [(nixpkgs.haskellPackages.ghcWithPackages buildInputs)];
     unpackPhase = ''
@@ -24,4 +24,5 @@ in
 rec {
   hello = builder ./hello.hs {};
   auto = builder ./auto.hs { name = "auto"; };
+  auto_simple = builder ./simple.hs { name = "simple"; };
 }
