@@ -33,7 +33,7 @@ myStreamMoore = go 1
     go :: Int -> Moore a Int
     go n = Moore n (\_ -> go (n+1))
 
-data Auto a b = ACons (a -> (b, Auto a b))
+data Auto a b = ACons { runAuto :: (a -> (b, Auto a b)) }
 
 -- Note the difference between those types
 
@@ -65,6 +65,12 @@ settableMoore = go 1
       Nothing -> go (n+1)
       Just x -> go (x+1)
 
+testAuto :: Auto a b -> [a] -> ([b], Auto a b)
+testAuto auto [] = ([], auto)
+testAuto auto (x:xs) = (y:ys, final)
+  where
+       (y, next) = runAuto auto x
+       (ys, final) = testAuto next xs
 
 main :: IO ()
 main = undefined
